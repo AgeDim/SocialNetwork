@@ -36,7 +36,7 @@ public class MailActivity extends AppCompatActivity {
         userView = findViewById(R.id.userView);
         adapter = new UserAdapter(this, users);
         LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                = new LinearLayoutManager(this);
         userView.setLayoutManager(layoutManager);
         userView.setAdapter(adapter);
         dbRef.child("user").addValueEventListener(new ValueEventListener() {
@@ -47,7 +47,8 @@ public class MailActivity extends AppCompatActivity {
                 users.clear();
                 for (DataSnapshot dsp : snapshot.getChildren()) {
                     User userKey = dsp.getValue(User.class);
-                    if (!Objects.requireNonNull(mAuth.getCurrentUser()).getUid().equals(Objects.requireNonNull(userKey).uid)) {
+                    String userUID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+                    if (!userUID.equals(Objects.requireNonNull(userKey).getUid())) {
                         users.add(userKey);
                     }
                 }

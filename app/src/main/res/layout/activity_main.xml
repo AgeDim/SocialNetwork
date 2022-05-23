@@ -26,6 +26,8 @@
         android:width="250dp"
         android:height="40dp"
         android:background="@drawable/text"
+        android:hint="email"
+        android:paddingStart="10dp"
         android:textColor="@color/black"
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
@@ -39,31 +41,38 @@
         android:width="250dp"
         android:height="40dp"
         android:background="@drawable/text"
+        android:hint="password"
+        android:paddingStart="10dp"
         android:textColor="@color/black"
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
     <Button
         android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/error"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="Login in"
-        android:layout_centerHorizontal="true"/>
+        android:background="@drawable/btn"
+        android:text="Login in" />
+
     <TextView
+        android:id="@+id/or"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/or"
-        android:text="OR"
         android:layout_below="@+id/login"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:text="OR" />
+
     <Button
-    android:id="@+id/redirectOnReg"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/or"
-    android:layout_marginTop="10dp"
-    android:text="Register"
-    android:layout_centerHorizontal="true"/>
+        android:id="@+id/redirectOnReg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/or"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn"
+        android:text="Register" />
 
     <TextView
         android:id="@+id/error"

@@ -5,6 +5,11 @@ public class User {
     String email;
     String uid;
 
+    public String getUid() {
+        return uid;
+    }
+
+    User(){}
 
     User(String name, String email, String uid) {
         this.name = name;
