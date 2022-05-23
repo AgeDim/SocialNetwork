@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MailActivity extends AppCompatActivity {
     RecyclerView userView;
@@ -46,7 +47,7 @@ public class MailActivity extends AppCompatActivity {
                 users.clear();
                 for (DataSnapshot dsp : snapshot.getChildren()) {
                     User userKey = dsp.getValue(User.class);
-                    if (!mAuth.getCurrentUser().getUid().equals(userKey.uid)) {
+                    if (!Objects.requireNonNull(mAuth.getCurrentUser()).getUid().equals(Objects.requireNonNull(userKey).uid)) {
                         users.add(userKey);
                     }
                 }

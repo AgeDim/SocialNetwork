@@ -5,8 +5,6 @@ public class User {
     String email;
     String uid;
 
-    User() {
-    }
 
     User(String name, String email, String uid) {
         this.name = name;
@@ -22,16 +20,5 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUid() {
-        return uid;
-    }
 
 }

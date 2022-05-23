@@ -1,6 +1,5 @@
 package com.example.socialnetwork;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,9 +9,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,17 +43,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void login(String email, String password) {
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "Login successful!!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainActivity.this, MailActivity.class);
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(getApplicationContext(), "Login successful!!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.this, MailActivity.class);
 
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Login failed!!", Toast.LENGTH_LONG).show();
-                }
+                startActivity(intent);
+            } else {
+                Toast.makeText(getApplicationContext(), "Login failed!!", Toast.LENGTH_LONG).show();
             }
         });
 
