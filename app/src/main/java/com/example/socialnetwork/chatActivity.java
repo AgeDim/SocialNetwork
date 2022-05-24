@@ -1,14 +1,23 @@
 package com.example.socialnetwork;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -18,7 +27,11 @@ public class chatActivity extends AppCompatActivity {
     private EditText messageBox;
     private ImageView send;
     private MessageAdapter messageAdapter;
-    private ArrayList<Message> messageList;
+    ArrayList<Message> messageList = new ArrayList<Message>();
+    private DatabaseReference mDB;
+    String receiverRoom;
+    String senderRoom;
+    String senderUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,16 +39,49 @@ public class chatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
-        String uid = intent.getStringExtra("uid");
+        String receiverUID = intent.getStringExtra("uid");
+        senderUID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        senderRoom = receiverUID + senderUID;
+        receiverRoom = senderUID + receiverUID;
         Objects.requireNonNull(getSupportActionBar()).setTitle(name);
         chatView = findViewById(R.id.chatView);
         messageBox = findViewById(R.id.messageBox);
         send = findViewById(R.id.send);
-        messageList = new ArrayList<Message>();
         messageAdapter = new MessageAdapter(this, messageList);
+        mDB = FirebaseDatabase.getInstance().getReference();
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this);
+        chatView.setLayoutManager(layoutManager);
+        chatView.setAdapter(messageAdapter);
         send.setOnClickListener(v -> {
+            String message = messageBox.getText().toString();
+            Message messageObj = new Message(message, senderUID);
+            mDB.child("chats").child(senderRoom).child("message").push().setValue(messageObj).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    mDB.child("chats").child(receiverRoom).child("message").push().setValue(messageObj);
 
-            Toast.makeText(chatActivity.this, "ХРЮ ебать!", Toast.LENGTH_LONG).show();
+                    messageBox.setText("");
+                }
+            });
+        });
+
+        mDB.child("chats").child(senderRoom).child("message").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                messageList.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Message messages = ds.getValue(Message.class);
+                    messageList.add(messages);
+                }
+                messageAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         });
     }
 }
