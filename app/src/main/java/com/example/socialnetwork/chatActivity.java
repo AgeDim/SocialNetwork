@@ -64,6 +64,7 @@ public class chatActivity extends AppCompatActivity {
         });
         send.setOnClickListener(v -> {
             String message = messageBox.getText().toString();
+            if(message.equals("") || message.equals(" ")){return;}
             Message messageObj = new Message(message, senderUID);
             mDB.child("chats").child(senderRoom).child("message").push().setValue(messageObj).addOnSuccessListener(unused -> {
                 mDB.child("chats").child(receiverRoom).child("message").push().setValue(messageObj);

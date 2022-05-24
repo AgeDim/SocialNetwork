@@ -20,7 +20,8 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="This is send message"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textColor="@color/black"/>
     </RelativeLayout>
 
 </RelativeLayout>
