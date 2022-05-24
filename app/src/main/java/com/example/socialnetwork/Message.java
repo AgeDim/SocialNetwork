@@ -7,6 +7,8 @@ public class Message {
     Message() {
     }
 
+
+
     Message(String message, String senderId) {
         this.message = message;
         this.senderId = senderId;

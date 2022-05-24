@@ -9,9 +9,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,18 +29,23 @@ public class chatActivity extends AppCompatActivity {
     private ImageView send;
     private MessageAdapter messageAdapter;
     ArrayList<Message> messageList = new ArrayList<Message>();
+    private ImageButton photoBtn;
     private DatabaseReference mDB;
     String receiverRoom;
     String senderRoom;
     String senderUID;
+    String name;
+    String receiverUID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         Intent intent = getIntent();
-        String name = intent.getStringExtra("name");
-        String receiverUID = intent.getStringExtra("uid");
+        photoBtn = findViewById(R.id.photo);
+        name = intent.getStringExtra("name");
+        receiverUID = intent.getStringExtra("uid");
         senderUID = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         senderRoom = receiverUID + senderUID;
         receiverRoom = senderUID + receiverUID;
@@ -53,16 +59,16 @@ public class chatActivity extends AppCompatActivity {
                 = new LinearLayoutManager(this);
         chatView.setLayoutManager(layoutManager);
         chatView.setAdapter(messageAdapter);
+        photoBtn.setOnClickListener(v -> {
+            Toast.makeText(this, "должно отправлять фотки но не отправляет", Toast.LENGTH_SHORT).show();
+        });
         send.setOnClickListener(v -> {
             String message = messageBox.getText().toString();
             Message messageObj = new Message(message, senderUID);
-            mDB.child("chats").child(senderRoom).child("message").push().setValue(messageObj).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    mDB.child("chats").child(receiverRoom).child("message").push().setValue(messageObj);
+            mDB.child("chats").child(senderRoom).child("message").push().setValue(messageObj).addOnSuccessListener(unused -> {
+                mDB.child("chats").child(receiverRoom).child("message").push().setValue(messageObj);
 
-                    messageBox.setText("");
-                }
+                messageBox.setText("");
             });
         });
 
