@@ -4,6 +4,7 @@ public class User {
     String name;
     String email;
     String uid;
+    UserConfig config;
 
     public String getUid() {
         return uid;
@@ -11,10 +12,11 @@ public class User {
 
     User(){}
 
-    User(String name, String email, String uid) {
+    User(String name, String email, String uid,UserConfig config) {
         this.name = name;
         this.email = email;
         this.uid = uid;
+        this.config = config;
     }
 
     public String getName() {

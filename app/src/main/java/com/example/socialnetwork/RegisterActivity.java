@@ -27,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
     TextView error1;
     EditText name;
     DatabaseReference mDataBase;
+    UserConfig defaultConfig = new UserConfig(null);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void addUserToDB(String name, String email, String uid) {
         mDataBase = FirebaseDatabase.getInstance().getReference();
-        mDataBase.child("user").child(uid).setValue(new User(name, email, uid));
+        mDataBase.child("user").child(uid).setValue(new User(name, email, uid, defaultConfig));
     }
 
 }

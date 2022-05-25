@@ -1,9 +1,12 @@
 package com.example.socialnetwork;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,9 +26,22 @@ import java.util.Objects;
 public class MailActivity extends AppCompatActivity {
     RecyclerView userView;
     ArrayList<User> users = new ArrayList<>();
+
+    public UserAdapter getAdapter() {
+        return adapter;
+    }
+
+    public void setAdapter(UserAdapter adapter) {
+        this.adapter = adapter;
+    }
+
     UserAdapter adapter;
     FirebaseAuth mAuth;
     DatabaseReference dbRef;
+    EditText nameUser;
+    User currentUser;
+    private ImageView profilePhoto;
+    DatabaseReference mDataBase = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +51,8 @@ public class MailActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         userView = findViewById(R.id.userView);
         adapter = new UserAdapter(this, users);
+        nameUser = findViewById(R.id.nameUser);
+        profilePhoto = findViewById(R.id.profilePhoto);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this);
         userView.setLayoutManager(layoutManager);
@@ -50,6 +68,8 @@ public class MailActivity extends AppCompatActivity {
                     String userUID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                     if (!userUID.equals(Objects.requireNonNull(userKey).getUid())) {
                         users.add(userKey);
+                    }else{
+                        currentUser = userKey;
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -73,6 +93,13 @@ public class MailActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.logout) {
             mAuth.signOut();
             finish();
+            return true;
+        }
+        if(item.getItemId() == R.id.userPhoto){
+            String name = currentUser.name;
+            Intent intent = new Intent(this,ProfileActivity.class);
+            intent.putExtra("name",name);
+            startActivity(intent);
             return true;
         }
         return true;
