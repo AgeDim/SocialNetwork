@@ -1,6 +1,7 @@
 package com.example.socialnetwork;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     TextView error1;
     EditText name;
     DatabaseReference mDataBase;
-    UserConfig defaultConfig = new UserConfig(null);
+    String imagePath = "DEFAULT.jpeg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void addUserToDB(String name, String email, String uid) {
         mDataBase = FirebaseDatabase.getInstance().getReference();
-        mDataBase.child("user").child(uid).setValue(new User(name, email, uid, defaultConfig));
+        mDataBase.child("user").child(uid).setValue(new User(name, email, uid,imagePath));
+        mDataBase.child("user").child(uid).child("imagePath").setValue(imagePath);
     }
 
 }

@@ -10,6 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.IOException;
 import java.util.*;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
@@ -28,18 +32,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         return new UserViewHolder(view);
     }
 
-    public ArrayList<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(ArrayList<User> users) {
-        this.users = users;
-    }
-
     @Override
     public void onBindViewHolder(@NonNull UserAdapter.UserViewHolder holder, int position) {
         User currentUser = users.get(position);
         holder.setName(currentUser.name);
+        try {
+            holder.setImage(currentUser.uid);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, chatActivity.class);
             intent.putExtra("name", currentUser.name);
@@ -56,10 +57,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public static class UserViewHolder extends RecyclerView.ViewHolder {
 
         View rview;
+        StorageReference reference = FirebaseStorage.getInstance().getReference();
 
         public UserViewHolder(View itemView) {
             super(itemView);
             rview = itemView;
+        }
+
+        public void setImage(String uid) throws IOException {
+//            ImageView avatar = rview.findViewById(R.id.avatar);
+//            reference.child("myImages/" + uid).getDownloadUrl().addOnSuccessListener(uri -> {
+//                Picasso.get(rview).load(uri).into((Target) avatar.getBackground());
+//            });
         }
 
         public void setName(String name) {

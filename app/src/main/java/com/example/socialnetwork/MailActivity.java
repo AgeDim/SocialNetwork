@@ -41,7 +41,6 @@ public class MailActivity extends AppCompatActivity {
     EditText nameUser;
     User currentUser;
     private ImageView profilePhoto;
-    DatabaseReference mDataBase = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
